@@ -54,6 +54,7 @@ body {
   color: inherit;
   transition: all 0.3s;
 }
+
 .login__input:focus {
   outline: none;
   border: 1px solid #ccc;
@@ -85,6 +86,7 @@ body {
   max-width: 100rem;
   width: 100%;
   margin: 4rem auto;
+  padding: 0 1rem;
   display: grid;
   grid-template-columns: 4fr 3fr;
   grid-template-rows: auto repeat(3, 15rem) auto;
@@ -104,7 +106,7 @@ body {
 .balance__label {
   font-size: 2.2rem;
   font-weight: 500;
-  margin-bottom: -0.2rem;
+  margin-bottom: -0.1rem;
 }
 
 .balance__date {
@@ -139,7 +141,6 @@ body {
   color: #fff;
   border-radius: 10rem;
   padding: 0.15rem 1rem;
-  background: red;
   margin-right: 2rem;
 }
 
@@ -289,4 +290,72 @@ h2 {
 
 .timer {
   font-weight: 600;
+}
+
+@media (max-width: 810px) {
+  .nav {
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 1rem;
+  }
+
+  .balance {
+    grid-column: 1;
+  }
+  .movements {
+    grid-row: 5 / span 3;
+  }
+
+  .summary {
+    grid-row: 8/9;
+  }
+
+  .summary__value {
+    margin-right: 2rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .login {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .login__input {
+    max-width: 100%;
+  }
+
+  .balance__label {
+    font-size: 1.8rem;
+  }
+
+  .balance__value {
+    font-size: 3rem;
+  }
+
+  .movements__row {
+    flex-wrap: wrap;
+    padding: 2rem;
+  }
+
+  .summary__label {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+
+  .summary__value {
+    font-size: 1.4rem;
+    margin-right: 1rem;
+  }
+  /* .summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 1.4rem;
+  } */
 }

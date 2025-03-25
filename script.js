@@ -35,13 +35,45 @@ const accounts = [
 // Elements
 // labels
 const labelWelcome = document.querySelector(".welcome");
+const labelDate = document.querySelector(".date");
 const labelBalance = document.querySelector(".balance__value");
 const labelSumIn = document.querySelector(".summary__value--in");
 const labelSumOut = document.querySelector(".summary__value--out");
 const labelSumInterest = document.querySelector(".summary__value--interest");
 
 // containers
+const containerApp = document.querySelector(".app");
 const containerMovements = document.querySelector(".movements");
+
+//btns
+const btnLogin = document.querySelector(".login__btn");
+const btnTransfer = document.querySelector(".form__btn--transfer");
+const btnLoan = document.querySelector(".form__btn--loan");
+const btnClose = document.querySelector(".form__btn--close");
+const btnSort = document.querySelector(".btn--sort");
+
+// input fields
+const inputLoginUsername = document.querySelector(".login__input--user");
+const inputLoginPin = document.querySelector(".login__input--pin");
+const inputTransferTo = document.querySelector(".form__input--to");
+const inputTransferAmount = document.querySelector(".form__input--amount");
+const inputLoanAmount = document.querySelector(".form__input--loan-amount");
+const inputCloseUsername = document.querySelector(".form__input--user");
+const inputClosePin = document.querySelector(".form__input--pin");
+
+//Functions
+// create usernames
+const createUsernames = function (accs) {
+  accs.forEach((acc) => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(" ")
+      .map((name) => name[0])
+      .join("");
+  });
+};
+
+createUsernames(accounts);
 
 // display movements
 const displayMovements = function (movements) {
@@ -66,13 +98,13 @@ const displayMovements = function (movements) {
 displayMovements(accounts[0].movements);
 
 // display balance
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
 
-  labelBalance.textContent = `${balance} €`;
+  labelBalance.textContent = `${acc.balance} €`;
 };
 
-calcDisplayBalance(accounts[0].movements);
+// calcDisplayBalance(accounts[0].movements);
 
 // calc display summary
 const calcDisplaySummary = function (account) {
@@ -80,16 +112,58 @@ const calcDisplaySummary = function (account) {
   const incomes = account.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}`;
+  labelSumIn.textContent = `${incomes} €`;
 
   //outgoing
   const withdrawals = account.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(withdrawals)}`;
+  labelSumOut.textContent = `${Math.abs(withdrawals)} €`;
 
   //interest on deposits
   const interest = (account.interestRate * incomes) / 100;
   labelSumInterest.textContent = `${interest}`;
 };
-calcDisplaySummary(accounts[0]);
+// calcDisplaySummary(accounts[0]);
+
+//update UI
+const updateUI = function (acc) {
+  //display movements
+  displayMovements(acc.movements);
+
+  // display balance
+  calcDisplayBalance(acc);
+
+  // display summary
+  calcDisplaySummary(acc);
+};
+// Event handlers
+//login
+
+let currentAccount;
+
+btnLogin.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    (acc) => acc.username === inputLoginUsername.value
+  );
+
+  console.log(currentAccount);
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    //display UI
+    labelWelcome.textContent = `Welcome back ${
+      currentAccount.owner.split(" ")[0]
+    }`;
+
+    containerApp.style.opacity = 1;
+
+    // clear input fields
+    inputLoginUsername.value = inputLoginPin.value = "";
+    inputLoginPin.blur();
+
+    // update UI
+    updateUI(currentAccount);
+  }
+});

@@ -17,7 +17,7 @@ body {
   background: #f3f3f3;
   color: #444;
   padding: 2rem;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .nav {
@@ -278,6 +278,10 @@ h2 {
 .form__btn:focus {
   outline: none;
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+.loan__warning {
+  font-size: 1rem;
 }
 
 /* logout timer */

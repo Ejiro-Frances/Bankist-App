@@ -106,7 +106,7 @@
         </form>
       </div>
 
-      <!-- Operations:close account -->
+      <!-- Operations: loan -->
       <div class="operation operation--loan">
         <h2>Request loan</h2>
         <form class="form form--loan">
@@ -120,16 +120,17 @@
             Amount
           </label>
         </form>
+        <p class="loan__warning">Max loan is 10% of your largest deposit</p>
       </div>
 
-      <!-- Operations:Close -->
+      <!-- Operations:Close account-->
       <div class="operation operation--close">
         <h2>Close account</h2>
         <form class="form">
           <input
             type="text"
             id="confirm-user"
-            class="form__input form__input-user"
+            class="form__input form__input--user"
           />
           <input
             type="number"

@@ -62,22 +62,13 @@ const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
 //Functions
-// create usernames
-const createUsernames = function (accs) {
-  accs.forEach((acc) => {
-    acc.username = acc.owner
-      .toLowerCase()
-      .split(" ")
-      .map((name) => name[0])
-      .join("");
-  });
-};
-
-createUsernames(accounts);
-
 // display movements
-const displayMovements = function (movements) {
-  movements.forEach((mov, i) => {
+const displayMovements = function (movements, sort = false) {
+  containerMovements.innerHTML = "";
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach((mov, i) => {
     const type = mov > 0 ? "deposit" : "withdrawal";
 
     const html = `
@@ -94,8 +85,6 @@ const displayMovements = function (movements) {
   });
 };
 
-// displayMovements(accounts[0].movements);
-
 // display balance
 const calcDisplayBalance = function (acc) {
   //calc balance and store it in the acc object
@@ -103,8 +92,6 @@ const calcDisplayBalance = function (acc) {
 
   labelBalance.textContent = `${acc.balance} €`;
 };
-
-// calcDisplayBalance(accounts[0].movements);
 
 // calc display summary
 const calcDisplaySummary = function (account) {
@@ -121,10 +108,28 @@ const calcDisplaySummary = function (account) {
   labelSumOut.textContent = `${Math.abs(withdrawals)} €`;
 
   //interest on deposits
-  const interest = (account.interestRate * incomes) / 100;
-  labelSumInterest.textContent = `${interest}`;
+  const interest = account.movements
+    .filter((mov) => mov > 0)
+    .map((deposit) => (deposit * account.interestRate) / 100)
+    .filter((int, i, arr) => {
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}€`;
 };
-// calcDisplaySummary(accounts[0]);
+
+// create usernames
+const createUsernames = function (accs) {
+  accs.forEach((acc) => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(" ")
+      .map((name) => name[0])
+      .join("");
+  });
+};
+
+createUsernames(accounts);
 
 //update UI
 const updateUI = function (acc) {
@@ -233,4 +238,12 @@ btnClose.addEventListener("click", (e) => {
   }
   inputCloseUsername.value = inputClosePin.value = "";
   inputClosePin.blur();
+});
+
+// sort
+let sorted = false;
+btnSort.addEventListener("click", (e) => {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
